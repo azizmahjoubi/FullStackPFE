@@ -1,0 +1,23 @@
+{
+  "name": "appinventaire",
+  "version": "1.0.0",
+  "description": "Restful CRUD API node.js , express , mongoDB",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb",
+    "rest",
+    "api"
+  ],
+  "author": "Aziz Mahjoubi",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "mongoose": "^8.2.1"
+  }
+}

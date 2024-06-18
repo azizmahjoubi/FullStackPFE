@@ -1,0 +1,28 @@
+---
+- name: Update and run back-pipeline Docker container
+  hosts: app
+  tasks:
+    - name: Pull the latest mdhiadhia/back-pipeline image
+      command: docker pull mdhiadhia/back-pipeline:latest
+
+    - name: Stop and remove existing back-pipeline containers
+      command: docker stop back-pipeline 
+      ignore_errors: yes
+
+    - name: Remove the back-pipeline container
+      command: docker rm back-pipeline 
+      ignore_errors: yes
+
+    - name: Stop and remove existing mongo-db containers
+      command: docker stop mongo-db 
+      ignore_errors: yes
+
+    - name: Remove the mongo-db container
+      command: docker rm mongo-db 
+      ignore_errors: yes
+
+    - name: Run the back-pipeline container
+      command: docker run -d --name back-pipeline -p 3000:3000 mdhiadhia/back-pipeline:latest
+
+    - name: Run the mongo-db container
+      command: docker run -d --name mongo-db --network container:back-pipeline -v /home/ansadmin/data:/data/db mongo:latest
