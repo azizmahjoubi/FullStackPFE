@@ -1,6 +1,10 @@
 pipeline {
     agent any
- 
+
+    environment {
+        NODE_VERSION = '18.13.0'
+    }
+
     stages {
         stage("Cleanup Workspace") {
             steps {
@@ -10,7 +14,7 @@ pipeline {
 
         stage("Checkout from SCM") {
             steps {
-                git branch: 'main', credentialsId: 'github', url: 'https://github.com/azizmahjoubi/FullStackPFE'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/azizmahjoubi/FullStackPFE.git'
             }
         }
 
@@ -22,11 +26,35 @@ pipeline {
             }
         }
 
+        stage("Setup Node.js") {
+            steps {
+                sh '''
+                    # Install nvm if not already installed
+                    if ! command -v nvm &> /dev/null
+                    then
+                        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                    fi
+                    # Use the specified Node.js version
+                    nvm install ${NODE_VERSION}
+                    nvm use ${NODE_VERSION}
+                    node -v
+                    npm -v
+                '''
+            }
+        }
+
         stage("Build Angular Application") {
             steps {
                 dir('angular') {
-                    sh 'npm install'
-                    sh 'npm run build' // Ensure this script is defined in angular/package.json
+                    sh '''
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                        nvm use ${NODE_VERSION}
+                        npm install
+                        npm run build
+                    '''
                 }
             }
         }
@@ -34,7 +62,12 @@ pipeline {
         stage("Install Dependencies for Express") {
             steps {
                 dir('express') {
-                    sh 'npm install'
+                    sh '''
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                        nvm use ${NODE_VERSION}
+                        npm install
+                    '''
                 }
             }
         }
@@ -42,7 +75,12 @@ pipeline {
         stage("Test Application") {
             steps {
                 dir('express') {
-                    sh 'npm test' // Ensure this script is defined in express/package.json
+                    sh '''
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                        nvm use ${NODE_VERSION}
+                        npm test
+                    '''
                 }
             }
         }
@@ -50,7 +88,12 @@ pipeline {
         stage("Start Express Server") {
             steps {
                 dir('express') {
-                    sh 'npm start' // Ensure this script is defined in express/package.json
+                    sh '''
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                        nvm use ${NODE_VERSION}
+                        npm start
+                    '''
                 }
             }
         }
