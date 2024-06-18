@@ -11,8 +11,6 @@ pipeline {
         stage("Checkout from SCM") {
             steps {
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/azizmahjoubi/FullStackPFE'
-                sh 'git submodule init'
-                sh 'git submodule update'
             }
         }
    stage("Verify Workspace") {
@@ -24,7 +22,7 @@ pipeline {
         }
         stage("Build Angular Application") {
             steps {
-                dir('angular/angular-main') {
+                dir('angular') {
                     sh 'npm install'
                     sh 'npm run build' // Ensure this script is defined in frontend/package.json
                 }
@@ -33,7 +31,7 @@ pipeline {
 
         stage("Install Dependencies for Express") {
             steps {
-                dir('express/express-main') {
+                dir('express') {
                     sh 'npm install'
                 }
             }
@@ -41,7 +39,7 @@ pipeline {
 
         stage("Test Application") {
             steps {
-                dir('express/express-main') {
+                dir('express') {
                     sh 'npm test' // Ensure this script is defined in backend/package.json
                 }
             }
@@ -49,7 +47,7 @@ pipeline {
 
         stage("Start Express Server") {
             steps {
-                dir('express/express-main') {
+                dir('express') {
                     sh 'npm start' // Ensure this script is defined in backend/package.json
                 }
             }
