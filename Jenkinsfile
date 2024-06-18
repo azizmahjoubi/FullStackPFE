@@ -16,7 +16,7 @@ pipeline {
 
         stage("Build Angular Application") {
             steps {
-                dir('frontend') {
+                dir('angular') {
                     sh 'npm install'
                     sh 'npm run build' // Ensure this script is defined in frontend/package.json
                 }
@@ -25,7 +25,7 @@ pipeline {
 
         stage("Install Dependencies for Express") {
             steps {
-                dir('backend') {
+                dir('express') {
                     sh 'npm install'
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
 
         stage("Test Application") {
             steps {
-                dir('backend') {
+                dir('express') {
                     sh 'npm test' // Ensure this script is defined in backend/package.json
                 }
             }
@@ -41,7 +41,7 @@ pipeline {
 
         stage("Start Express Server") {
             steps {
-                dir('backend') {
+                dir('express') {
                     sh 'npm start' // Ensure this script is defined in backend/package.json
                 }
             }
