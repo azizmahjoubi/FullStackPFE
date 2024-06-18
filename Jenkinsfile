@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    environment {
+        NODE_VERSION = '18.13.0'
+    }
     stages {
         stage("Cleanup Workspace") {
             steps {
