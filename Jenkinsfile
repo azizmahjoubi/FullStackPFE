@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh 'ls -l' // List the contents of the root directory
                 sh 'ls -l angular' // List the contents of the angular directory
-                sh 'ls -l backend' // List the contents of the backend directory
+                sh 'ls -l express' // List the contents of the backend directory
             }
         }
         stage("Build Angular Application") {
