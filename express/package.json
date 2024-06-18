@@ -4,7 +4,6 @@
   "description": "Restful CRUD API node.js, express, mongoDB",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
     "test": "mocha test/*.js"
   },
   "keywords": [
@@ -22,6 +21,7 @@
     "mongoose": "^8.2.1"
   },
   "devDependencies": {
-    "mocha": "^9.2.2"
+    "mocha": "^10.4.0",
+    "supertest": "^7.0.0"
   }
 }
