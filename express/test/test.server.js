@@ -1,10 +1,10 @@
 const assert = require('assert');
 const request = require('supertest');
-const app = require('../server');
+const { server } = require('../server');
 
 describe('Server Tests', function() {
   it('should return status 200 for GET /', function(done) {
-    request(app)
+    request(server)
       .get('/')
       .expect(200, done);
   });
