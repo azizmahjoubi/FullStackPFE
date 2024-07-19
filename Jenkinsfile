@@ -87,7 +87,7 @@ pipeline {
       stage("SonarQube Analysis") {
             steps {
                 script {
-                    withSonarQubeEnv('jenkins-sonarqube-token') { 
+                    withSonarQubeEnv('sonarqube-server') { 
                         dir('express') { // Assuming SonarQube analysis is for the express directory
                             sh '''
                                 export NVM_DIR="$HOME/.nvm"
