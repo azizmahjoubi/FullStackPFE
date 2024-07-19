@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SONARQUBE_SERVER = 'http://192.168.33.10:9000'
-        SONARQUBE_LOGIN = 'jenkins-sonarqube-token'
+        SONARQUBE_LOGIN = 'sqa_59b63127556b703bc0bd837e0de188be98c1e321'
         NODE_VERSION = '18.13.0'
     }
 
