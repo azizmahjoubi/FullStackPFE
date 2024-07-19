@@ -2,6 +2,8 @@ pipeline {
     agent any
 
     environment {
+        SONARQUBE_SERVER = 'http://192.168.33.10:9000'
+        SONARQUBE_LOGIN = 'jenkins-sonarqube-token'
         NODE_VERSION = '18.13.0'
     }
 
