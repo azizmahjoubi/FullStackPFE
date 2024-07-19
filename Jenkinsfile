@@ -84,22 +84,18 @@ pipeline {
                 }
             }
         }
-      stage("SonarQube Analysis") {
-            steps {
-                script {
-                    withSonarQubeEnv('sonarqube-server') { 
-                        dir('express') { // Assuming SonarQube analysis is for the express directory
-                            sh '''
-                                export NVM_DIR="$HOME/.nvm"
-                                [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-                                nvm use ${NODE_VERSION}
-                                npx sonar-scanner
-                            '''
-                        }
-                    }
+stage("SonarQube Analysis") {
+    steps {
+        script {
+            withSonarQubeEnv('sonarqube-server') {
+                dir('express') {
+                    sh 'npx sonar-scanner -X'
                 }
             }
         }
+    }
+}
+
         stage("Start Express Server") {
             steps {
                 dir('express') {
