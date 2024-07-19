@@ -84,16 +84,22 @@ pipeline {
                 }
             }
         }
-         stage("SonarQube Analysis"){
-           steps {
-	           script {
-		        withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') { 
-                        sh "mvn sonar:sonar"
-		        }
-	           }	
-           }
-       }
-
+      stage("SonarQube Analysis") {
+            steps {
+                script {
+                    withSonarQubeEnv('jenkins-sonarqube-token') { 
+                        dir('express') { // Assuming SonarQube analysis is for the express directory
+                            sh '''
+                                export NVM_DIR="$HOME/.nvm"
+                                [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+                                nvm use ${NODE_VERSION}
+                                npx sonar-scanner
+                            '''
+                        }
+                    }
+                }
+            }
+        }
         stage("Start Express Server") {
             steps {
                 dir('express') {
