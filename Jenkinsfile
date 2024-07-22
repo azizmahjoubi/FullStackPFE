@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SONARQUBE_SERVER = 'http://192.168.33.10:9000'
-        SONARQUBE_LOGIN = 'admin'
+        SONARQUBE_LOGIN = 'sqa_9cc4716fd3bb4537cf09548a1a57640aebd1b0fb'
         NODE_VERSION = '18.13.0'
     }
 
