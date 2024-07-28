@@ -91,7 +91,9 @@ stage("SonarQube Analysis") {
         script {
             withSonarQubeEnv('sonarqube-server') {
                 dir('express') {
-                    sh 'npx sonar-scanner -X'
+withCredentials([string(credentialsId: 'sqa_9cc4716fd3bb4537cf09548a1a57640aebd1b0fb', variable: 'SONAR_TOKEN')]) {
+    sh "npx sonar-scanner -Dsonar.login=${SONAR_TOKEN} -Dsonar.host.url=http://192.168.33.10:9000 -X"
+}
                 }
             }
         }
