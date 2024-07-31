@@ -140,6 +140,16 @@ pipeline {
                 }
             }
         }
+                
+        stage("Deploy with Docker Compose") {
+            steps {
+                sh '''
+                    docker-compose down || true
+                    docker-compose up -d
+                '''
+            }
+        }
+    }
         stage("Start Express Server") {
             steps {
                 dir('express') {
