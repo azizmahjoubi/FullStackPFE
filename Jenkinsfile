@@ -31,14 +31,12 @@ pipeline {
         stage("Setup Node.js") {
             steps {
                 sh '''
-                    # Install nvm if not already installed
                     if ! command -v nvm &> /dev/null
                     then
                         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
                         export NVM_DIR="$HOME/.nvm"
                         [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                     fi
-                    # Use the specified Node.js version
                     nvm install ${NODE_VERSION}
                     nvm use ${NODE_VERSION}
                     node -v
@@ -86,19 +84,25 @@ pipeline {
                 }
             }
         }
-stage("SonarQube Analysis") {
-    steps {
-        script {
-            withSonarQubeEnv('sonarqube-server') {
-                dir('express') {
-withCredentials([string(credentialsId: 'sqa_9cc4716fd3bb4537cf09548a1a57640aebd1b0fb', variable: 'SONAR_TOKEN')]) {
-    sh "npx sonar-scanner -Dsonar.login=${SONAR_TOKEN} -Dsonar.host.url=http://192.168.33.10:9000 -X"
-}
+
+        stage("SonarQube Analysis") {
+            steps {
+                script {
+                    withSonarQubeEnv('sonarqube-server') {
+                        dir('express') {
+                            withCredentials([string(credentialsId: 'sqa_9cc4716fd3bb4537cf09548a1a57640aebd1b0fb', variable: 'SONAR_TOKEN')]) {
+                                sh '''
+                                    export NVM_DIR="$HOME/.nvm"
+                                    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+                                    nvm use ${NODE_VERSION}
+                                    npx sonar-scanner -Dsonar.login=${SONAR_TOKEN} -Dsonar.host.url=http://192.168.33.10:9000 -Dsonar.projectKey=my_project_key -Dsonar.sources=. -Dsonar.tests=test -Dsonar.sourceEncoding=UTF-8
+                                '''
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
-}
 
         stage("Start Express Server") {
             steps {
