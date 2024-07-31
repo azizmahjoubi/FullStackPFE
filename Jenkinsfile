@@ -143,10 +143,14 @@ pipeline {
                 
         stage("Deploy with Docker Compose") {
             steps {
-                sh '''
-                    docker-compose down || true
-                    docker-compose up -d
-                '''
+                 // Stop and remove existing containers
+                    sh '''
+                        docker-compose down || true
+                    '''
+                    // Start new containers
+                    sh '''
+                        docker-compose up -d
+                    '''
             }
         }
     
