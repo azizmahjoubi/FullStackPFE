@@ -4,7 +4,7 @@ pipeline {
     environment {
         SONARQUBE_SERVER = 'http://192.168.33.10:9000'
         NODE_VERSION = '18.13.0'
-            APP_NAME = "FullStackPFE"
+            APP_NAME = "fullstackpfe"
             RELEASE = "1.0.0"
             DOCKER_USER = "azizmh98"
             DOCKER_PASS = 'jenkinsdocker'
