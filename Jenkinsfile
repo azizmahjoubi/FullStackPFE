@@ -3,8 +3,14 @@ pipeline {
 
     environment {
         SONARQUBE_SERVER = 'http://192.168.33.10:9000'
-        SONARQUBE_LOGIN = 'sqa_9cc4716fd3bb4537cf09548a1a57640aebd1b0fb'
         NODE_VERSION = '18.13.0'
+            APP_NAME = "fullstackpfe"
+            RELEASE = "1.0.0"
+            DOCKER_USER = "azizmh98"
+            DOCKER_PASS = 'jenkinsdocker'
+            IMAGE_NAME_FRONTEND = "${DOCKER_USER}/frontend"
+            IMAGE_NAME_BACKEND = "${DOCKER_USER}/backend"
+            IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
     stages {
@@ -90,7 +96,7 @@ pipeline {
                 script {
                     withSonarQubeEnv('sonarqube-server') {
                         dir('express') {
-                            withCredentials([string(credentialsId: 'sqa_9cc4716fd3bb4537cf09548a1a57640aebd1b0fb', variable: 'SONAR_TOKEN')]) {
+                            withCredentials([string(credentialsId: 'jenkins-sonarqube-token', variable: 'SONAR_TOKEN')]) {
                                 sh '''
                                     export NVM_DIR="$HOME/.nvm"
                                     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
@@ -103,7 +109,37 @@ pipeline {
                 }
             }
         }
+     stage("Quality Gate"){
+           steps {
+               script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
+                }	
+            }
 
+        }
+    stage("Build & Push Docker Images") {
+            steps {
+                script {
+                    // Build and push Angular Docker image
+                    dir('angular') {
+                        docker.withRegistry('', DOCKER_PASS) {
+                            def docker_image_frontend = docker.build("${IMAGE_NAME_FRONTEND}")
+                            docker_image_frontend.push("${IMAGE_TAG}")
+                            docker_image_frontend.push('latest')
+                        }
+                    }
+
+                    // Build and push Express Docker image
+                    dir('express') {
+                        docker.withRegistry('', DOCKER_PASS) {
+                            def docker_image_backend = docker.build("${IMAGE_NAME_BACKEND}")
+                            docker_image_backend.push("${IMAGE_TAG}")
+                            docker_image_backend.push('latest')
+                        }
+                    }
+                }
+            }
+        }
         stage("Start Express Server") {
             steps {
                 dir('express') {
@@ -121,7 +157,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            //cleanWs()
+            cleanWs()
         }
     }
 }
