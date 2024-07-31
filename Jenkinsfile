@@ -8,8 +8,9 @@ pipeline {
             RELEASE = "1.0.0"
             DOCKER_USER = "azizmh98"
             DOCKER_PASS = 'jenkinsdocker'
-            IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
-            IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+            IMAGE_NAME_FRONTEND = "${DOCKER_USER}/frontend"
+            IMAGE_NAME_BACKEND = "${DOCKER_USER}/backend"
+            IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
     stages {
@@ -116,21 +117,29 @@ pipeline {
             }
 
         }
-               stage("Build & Push Docker Image") {
+    stage("Build & Push Docker Images") {
             steps {
                 script {
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image = docker.build "${IMAGE_NAME}"
+                    // Build and push Angular Docker image
+                    dir('angular') {
+                        docker.withRegistry('', DOCKER_PASS) {
+                            def docker_image_frontend = docker.build("${IMAGE_NAME_FRONTEND}")
+                            docker_image_frontend.push("${IMAGE_TAG}")
+                            docker_image_frontend.push('latest')
+                        }
                     }
 
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image.push("${IMAGE_TAG}")
-                        docker_image.push('latest')
+                    // Build and push Express Docker image
+                    dir('express') {
+                        docker.withRegistry('', DOCKER_PASS) {
+                            def docker_image_backend = docker.build("${IMAGE_NAME_BACKEND}")
+                            docker_image_backend.push("${IMAGE_TAG}")
+                            docker_image_backend.push('latest')
+                        }
                     }
                 }
             }
-
-       }
+        }
         stage("Start Express Server") {
             steps {
                 dir('express') {
