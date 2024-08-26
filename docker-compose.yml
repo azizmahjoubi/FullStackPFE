@@ -23,7 +23,7 @@ services:
     networks:
       - fullstack-network
     environment:
-      - MONGO_URI=mongodb://127.0.0.1:27017/StarServeur_db
+      - MONGO_URI=mongodb://mongo:27017/StarServeur_db
     depends_on:
       - mongo
 
