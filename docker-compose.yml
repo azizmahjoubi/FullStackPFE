@@ -1,6 +1,14 @@
 version: '2.3'
 
 services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - fullstack-network
+
   frontend:
     image: azizmh98/frontend
     ports:
@@ -14,6 +22,10 @@ services:
       - "3000:3000"
     networks:
       - fullstack-network
+    environment:
+      - MONGO_URI=mongodb://127.0.0.1:27017/StarServeur_db
+    depends_on:
+      - mongo
 
 networks:
   fullstack-network:
