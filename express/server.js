@@ -10,8 +10,11 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 const db = require("./app/models");
+
+const dbURI = process.env.MONGO_URI || db.url; // Use MONGO_URI from environment variable or fallback to db.url
+
 db.mongoose
-  .connect(db.url, {
+  .connect(dbURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
