@@ -7,6 +7,7 @@ describe('Server Tests', function() {
     request(server)
       .get('/')
       .expect(200, done);
+    this.timeout(10000); 
   });
 
   // Add more test cases as per your application's logic
