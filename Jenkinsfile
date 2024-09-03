@@ -141,7 +141,7 @@ pipeline {
             steps {
                  // Stop and remove existing containers
                     sh '''
-                        docker-compose down || true
+                        docker-compose down --volumes --remove-orphans || true
                     '''
                     // Start new containers
                     sh '''
