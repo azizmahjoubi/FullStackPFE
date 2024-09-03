@@ -1,0 +1,7 @@
+# Use specific MongoDB version
+FROM mongo:4.4
+
+# Set up any additional configurations or volumes as needed
+VOLUME /data/db
+
+EXPOSE 27017
