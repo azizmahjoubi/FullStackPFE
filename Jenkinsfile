@@ -78,18 +78,7 @@ pipeline {
             }
         }
 
-        stage("Test Application") {
-            steps {
-                dir('express') {
-                    sh '''
-                        export NVM_DIR="$HOME/.nvm"
-                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-                        nvm use ${NODE_VERSION}
-                        npm test
-                    '''
-                }
-            }
-        }
+ 
 
         stage("SonarQube Analysis") {
             steps {
@@ -162,6 +151,18 @@ pipeline {
     
   
     }
+           stage("Test Application") {
+            steps {
+                dir('express') {
+                    sh '''
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+                        nvm use ${NODE_VERSION}
+                        npm test
+                    '''
+                }
+            }
+        }
 
     post {
         always {
