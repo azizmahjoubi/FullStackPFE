@@ -7,8 +7,8 @@ describe('Server Tests', function() {
 
   // Before all tests
   before(function(done) {
-    serverInstance = app.listen(3001, () => {
-      console.log('Server is running on port 3001.');
+    serverInstance = app.listen(3000, () => {
+      console.log('Server is running on port 3000.');
       done();
     });
   });
