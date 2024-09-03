@@ -7,7 +7,7 @@ describe('Server Tests', function() {
 
   before(function(done) {
     // Start the server before running tests
-    serverInstance = server.listen(3000, done);
+    serverInstance = server.listen(3001, done);
   });
 
   after(function(done) {
