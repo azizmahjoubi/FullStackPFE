@@ -1,22 +1,32 @@
 const assert = require('assert');
 const request = require('supertest');
-const { server } = require('../server'); // Import your server
+const { app, server } = require('../server'); // Ensure `server` is exported from `server.js`
 
 describe('Server Tests', function() {
   let serverInstance;
 
+  // Before all tests
   before(function(done) {
-    // Start the server before running tests
-    serverInstance = server.listen(3001, done);
+    serverInstance = app.listen(3000, () => {
+      console.log('Server is running on port 3000.');
+      done();
+    });
   });
 
+  // After all tests
   after(function(done) {
-    // Close the server after tests are done
-    serverInstance.close(done);
+    if (serverInstance) {
+      serverInstance.close(() => {
+        console.log('Server is closed.');
+        done();
+      });
+    } else {
+      done();
+    }
   });
 
   it('should return status 200 for GET /', function(done) {
-    request(serverInstance)
+    request(app)
       .get('/')
       .expect(200, done);
   });
