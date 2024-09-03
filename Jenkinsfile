@@ -137,6 +137,12 @@ pipeline {
                             docker_image_backend.push('latest')
                         }
                     }
+             // Build and push MongoDB Docker image
+            docker.withRegistry('', DOCKER_PASS) {
+                def docker_image_mongo = docker.build("${IMAGE_NAME_MONGO}", "--build-arg MONGO_VERSION=4.4 - < Dockerfile.mongo")
+                docker_image_mongo.push("${IMAGE_TAG}")
+                docker_image_mongo.push('latest')
+            }
                 }
             }
         }
