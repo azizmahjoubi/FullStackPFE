@@ -10,7 +10,7 @@ pipeline {
             DOCKER_PASS = 'jenkinsdocker'
             IMAGE_NAME_FRONTEND = "${DOCKER_USER}/frontend"
             IMAGE_NAME_BACKEND = "${DOCKER_USER}/backend"
-            IMAGE_NAME_MONGO = "${DOCKER_USER}/mongod"
+            IMAGE_NAME_MONGO = "${DOCKER_USER}/mongodb"
             IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
