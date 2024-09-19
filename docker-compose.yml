@@ -12,14 +12,14 @@ services:
   frontend:
     image: azizmh98/frontend
     ports:
-      - "8082:80"
+      - "8081:8081"
     networks:
       - fullstack-network
 
   backend:
     image: azizmh98/backend
     ports:
-      - "3001:3000"
+      - "3000:3000"
     networks:
       - fullstack-network
     environment:
